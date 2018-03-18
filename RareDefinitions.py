@@ -20,36 +20,50 @@ reddit = botConfig.login()
 subreddit = reddit.subreddit("test")
 comments = subreddit.stream.comments()
 
+if not os.path.isfile("repliedComments.txt"):
+	repliedComments = []
+	with open("repliedComments.txt", "a"): pass
+else:
+	with open("repliedComments.txt", "r") as file:
+		repliedComments = file.read()
+		repliedComments = repliedComments.split()
+		repliedComments = list(filter(None, repliedComments))
+
 # Iterate through the comments in the designated subreddit(s).
 for comment in comments:
-	if not os.path.isfile("repliedComments.txt"):
-		repliedComments = []
-		with open("repliedComments.txt", "a"): pass
-	else:
-		with open("repliedComments.txt", "r") as file:
-			repliedComments = file.read()
-			repliedComments = repliedComments.split()
-			repliedComments = list(filter(None, repliedComments))
-			
-	# If the comment has not yet been replied to, attempt to reply.
+	# If the comment has not yet been replied to, attempt to do so.
 	if comment.id not in repliedComments:
 		text = comment.body.lower()
-		reply = ""
+		message = ""
 	
+		# Remove unnecessary symbols to grab only words or fragments.
 		re.sub(r"[^\w]", ' ', text)
+		
 		# Iterate through each comment body checking for uncommon words.
 		for word in text.split():
 			frequency = zipf_frequency(word, "en", wordlist = "large")
 			if frequency != 0 and frequency < 1.5:
-				reply += "> " + '[' + word + "](http://www.dictionary.com/browse/" + word + "?s=t)" + "\n\n"
+				message += "> " + '[' + word + "](http://www.dictionary.com/browse/" + word + "?s=t)" + "\n\n"
 				
 				try:
 					synSet = nltk.corpus.wordnet.synsets(word)
 					definition = synSet[0].definition()
-					reply += "> " + definition + '\n'
+					message += "> " + definition + '\n'
 				except IndexError:
-					reply += "> " + "(Definition Unavailable)" + '\n'
+					message += "> " + "(Definition Unavailable)" + '\n'
 				
-				reply += "\n***"
-				reply += "^^Beep ^^boop! ^^I'm ^^a ^^bot ^^who ^^replies ^^with ^^definitions ^^for ^^uncommon ^^words. ^^:)\n\n"
-				reply += "^^[Github](https://github.com/Silcore/RareDefinitionsBot) ^^| [^^Message ^^Creator](https://www.reddit.com/message/compose/?to=sillycore)"	
+				message += "\n***"
+		
+		if len(message) > 0:
+			message += "^^Beep ^^boop! ^^I'm ^^a ^^bot ^^who ^^replies ^^with ^^definitions ^^for ^^uncommon ^^words. ^^:)\n\n"
+			message += "^^[Github](https://github.com/Silcore/RareDefinitionsBot) ^^| [^^Message ^^Creator](https://www.reddit.com/message/compose/?to=sillycore)"
+			comment.reply(message)
+			print("Bot replying to: " + comment.id + " ...")
+			
+		repliedComments.append(comment.id)
+	else:
+		print("Comment " + comment.id + " already processed. Skipping.")
+		
+with open("repliedComments.txt", "w") as file:
+	for commentID in repliedComments:
+		file.write(commentID + '\n')
