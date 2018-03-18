@@ -11,8 +11,9 @@ import botConfig
 
 import praw
 import os
+import re
+import nltk
 from wordfreq import zipf_frequency
-from vocabulary.vocabulary import Vocabulary as vocab
 
 # Initialize Reddit instance and other necessary variables.
 reddit = botConfig.login()
@@ -29,12 +30,26 @@ for comment in comments:
 			repliedComments = file.read()
 			repliedComments = repliedComments.split()
 			repliedComments = list(filter(None, repliedComments))
-	
+			
+	# If the comment has not yet been replied to, attempt to reply.
 	if comment.id not in repliedComments:
 		text = comment.body.lower()
+		reply = ""
 	
+		re.sub(r"[^\w]", ' ', text)
 		# Iterate through each comment body checking for uncommon words.
 		for word in text.split():
 			frequency = zipf_frequency(word, "en", wordlist = "large")
 			if frequency != 0 and frequency < 1.5:
-				# Begin replying to comment here... TO DO
+				reply += "> " + '[' + word + "](http://www.dictionary.com/browse/" + word + "?s=t)" + "\n\n"
+				
+				try:
+					synSet = nltk.corpus.wordnet.synsets(word)
+					definition = synSet[0].definition()
+					reply += "> " + definition + '\n'
+				except IndexError:
+					reply += "> " + "(Definition Unavailable)" + '\n'
+				
+				reply += "\n***"
+				reply += "^^Beep ^^boop! ^^I'm ^^a ^^bot ^^who ^^replies ^^with ^^definitions ^^for ^^uncommon ^^words. ^^:)\n\n"
+				reply += "^^[Github](https://github.com/Silcore/RareDefinitionsBot) ^^| [^^Message ^^Creator](https://www.reddit.com/message/compose/?to=sillycore)"	
