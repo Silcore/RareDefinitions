@@ -29,15 +29,17 @@ else:
 		repliedComments = repliedComments.split()
 		repliedComments = list(filter(None, repliedComments))
 
+botComments = reddit.redditor('RareDefinitions').comments.new()
+
 # Iterate through the comments in the designated subreddit(s).
 for comment in comments:
 	# If the comment has not yet been replied to, attempt to do so.
-	if comment.id not in repliedComments:
+	if comment.id not in repliedComments and comment.id not in botComments:
 		text = comment.body.lower()
 		message = ""
 	
 		# Remove unnecessary symbols to grab only words or fragments.
-		re.sub(r"[^\w]", ' ', text)
+		re.sub('[^A-Za-z]+', ' ', text)
 		
 		# Iterate through each comment body checking for uncommon words.
 		for word in text.split():
@@ -50,7 +52,8 @@ for comment in comments:
 					definition = synSet[0].definition()
 					message += "> " + definition + '\n'
 				except IndexError:
-					message += "> " + "(Definition Unavailable)" + '\n'
+					message = ""
+					break
 				
 				message += "\n***"
 		
