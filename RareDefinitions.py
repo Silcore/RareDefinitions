@@ -1,24 +1,21 @@
 '''
-Written by Dexter Ketchum
+Written by /u/SIllycore
 Rare Definitions Bot
 	1. Read Reddit comments.
 	2. Check for words with low frequencies.
 	3. Respond with definitions.
 '''
 
+# Custom module containing necessary login credentials.
+import botConfig
+
 import praw
 import os
 from wordfreq import zipf_frequency
-from configparser import SafeConfigParser
-from vocabulary.vocabulary import Vocabulary as vb
-
-config = SafeConfigParser()
-config.read("credentials.config")
+from vocabulary.vocabulary import Vocabulary as vocab
 
 # Initialize Reddit instance and other necessary variables.
-reddit = praw.Reddit(config.get("bot_values", "user_agent"), config.get("bot_values", "client_id"),
-					config.get("bot_values", "client_secret"), config.get("bot_values", "username"),
-					config.get("bot_values", "password"))
+reddit = botConfig.login()
 subreddit = reddit.subreddit("test")
 comments = subreddit.stream.comments()
 
@@ -26,7 +23,7 @@ comments = subreddit.stream.comments()
 for comment in comments:
 	if not os.path.isfile("repliedComments.txt"):
 		repliedComments = []
-		with open("repliedComments.txt", "w+"): pass
+		with open("repliedComments.txt", "a"): pass
 	else:
 		with open("repliedComments.txt", "r") as file:
 			repliedComments = file.read()
