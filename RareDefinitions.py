@@ -59,8 +59,7 @@ for comment in comments:
 			message += "^^[Github](https://github.com/Silcore/RareDefinitionsBot) ^^| [^^Message ^^Creator](https://www.reddit.com/message/compose/?to=sillycore)"
 			comment.reply(message)
 			print("Bot replying to: " + comment.id + " ...")
-			
-		repliedComments.append(comment.id)
+			repliedComments.append(comment.id)
 	else:
 		print("Comment " + comment.id + " already processed. Skipping.")
 		
