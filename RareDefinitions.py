@@ -1,5 +1,5 @@
 '''
-Written by /u/SIllycore
+Written by /u/Sillycore
 Rare Definitions Bot
 	1. Read Reddit comments.
 	2. Check for words with low frequencies.
