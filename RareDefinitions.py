@@ -7,6 +7,7 @@ import praw
 import os
 import re
 import nltk
+from nltk.stem.wordnet import WordNetLemmatizer
 from wordfreq import zipf_frequency
 
 # Initialize Reddit instance and other necessary variables.
@@ -42,21 +43,25 @@ for thread in hotThreads:
 				if frequency != 0 and frequency < 2 and word not in wordList:
 					# Add each word to wordList to prevent duplicate definitions per reply.
 					wordList.append(word)
-					message += "> " + '[' + word + "](http://www.dictionary.com/browse/" + word + "?s=t)" + "\n\n"
+					message += "> " + '[' + word + "](http://www.dictionary.com/browse/" + word + "?s=t)"
 					
+					if word != WordNetLemmatizer().lemmatize(word, 'v'):
+						word = WordNetLemmatizer().lemmatize(word, 'v')
+						message += " → " + '[' + word + "](http://www.dictionary.com/browse/" + word + "?s=t)"
+						
 					try:
 						synSet = nltk.corpus.wordnet.synsets(word)
 						definition = synSet[0].definition()
-						message += "> → " + definition + '\n'
+						message += "\n\n> → " + definition
 					except IndexError:
 						message = ""
 						break
 					
-					message += "\n***\n"
+					message += "\n\n***\n"
 			
 			if len(message) > 0:
 				message += "^^Beep! ^^I ^^define ^^uncommon ^^words. ^^| "
-				message += "^^[Github](https://github.com/Silcore/RareDefinitionsBot) ^^| [^^Message ^^Creator](https://www.reddit.com/message/compose/?to=sillycore)"
+				message += "^^[Github](https://github.com/Silcore/RareDefinitions) ^^| [^^Message ^^Creator](https://www.reddit.com/message/compose/?to=sillycore)"
 				comment.reply(message)
 				print("Bot replying to: " + comment.id + " ...")
 				repliedComments.append(comment.id)
