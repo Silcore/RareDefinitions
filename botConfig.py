@@ -17,3 +17,6 @@ def login():
 	)
 	
 	return reddit
+
+def getUsername():
+	return "HIDDEN_USERNAME"
