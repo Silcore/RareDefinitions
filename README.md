@@ -7,3 +7,10 @@ The Rare Definitions Bot is intended to define words that have uncommon usage in
   * [PRAW](https://github.com/praw-dev/praw)
   * [NLTK](https://www.nltk.org/)
   * [WordFreq](https://github.com/LuminosoInsight/wordfreq)
+  
+### To Do
+ * Automate the program, allowing it to run whenever the host computer is active.
+  * Swap designated subreddits periodically to comb over a wide range of popular topics.
+ * Allow the bot to detect rare words in self-post bodies.
+ * Include word pronunciation with proper IPA phonetic symbols.
+ * Include word parts-of-speech.
