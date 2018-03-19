@@ -1,10 +1,4 @@
-'''
-Written by /u/Sillycore
-Rare Definitions Bot
-	1. Read Reddit comments.
-	2. Check for words with low frequencies.
-	3. Respond with definitions.
-'''
+# Written by /u/Sillycore
 
 # Custom module containing necessary login credentials.
 import botConfig
@@ -34,7 +28,7 @@ for thread in hotThreads:
 	# Iterate through the comments in the designated subreddit(s).
 	for comment in comments:
 		# If the comment has not yet been replied to, attempt to do so.
-		if comment.id not in repliedComments and comment.author != "RareDefinitions":		
+		if comment.id not in repliedComments and comment.author != botConfig.getUsername():		
 			# Remove unnecessary symbols to grab only words or fragments.
 			text = re.sub('[^A-Za-z]+', ' ', comment.body.lower())
 			message = ""
