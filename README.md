@@ -15,4 +15,7 @@ The Rare Definitions Bot is intended to define words that have uncommon usage in
 * Include word pronunciation with proper IPA phonetic symbols.
 * Include word parts-of-speech.
 * Respond to comments such as "good bot" or "bad bot" by checking account mail.
-  * Include this in a separate GoodBadReply.py module?
+* Break the code into methods.
+  * Subreddit iterator to scan over top 25 of multiple subreddits.
+  * Good/Bad Replies
+  * Parsing/Defining
