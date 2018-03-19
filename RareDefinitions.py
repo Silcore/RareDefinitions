@@ -58,7 +58,8 @@ def defineWords(reddit, threads):
 				
 				if len(message) > 0:
 					message += "^^Beep! ^^I ^^define ^^uncommon ^^words. ^^| "
-					message += "^^[Github](https://github.com/Silcore/RareDefinitions) ^^| [^^Message ^^Creator](https://www.reddit.com/message/compose/?to=sillycore)"
+					message += "^^[Github](https://github.com/Silcore/RareDefinitions) ^^| "
+					message += "[^^Message ^^Creator](https://www.reddit.com/message/compose/?to=sillycore)"
 					comment.reply(message)
 					print("Bot replying to: " + comment.id + " ...")
 					repliedComments.append(comment.id)
@@ -79,13 +80,12 @@ def checkMessages(reddit):
 '''
 def getThreads(reddit):
 	# User-defined list of subreddits for the bot to check.
-	subreddits = ["test", "InforMe"]
+	subreddits = ["InforMe"]
 	threads = []
 	
 	for name in subreddits:
 		threads.extend(reddit.subreddit(name).hot(limit = 25))
 	
-	print(threads)
 	return threads
 	
 def main():
