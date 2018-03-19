@@ -17,7 +17,7 @@ from wordfreq import zipf_frequency
 
 # Initialize Reddit instance and other necessary variables.
 reddit = botConfig.login()
-hotThreads = reddit.subreddit("test").hot(limit = 25)
+hotThreads = reddit.subreddit("InforMe").hot(limit = 25)
 
 for thread in hotThreads:
 	comments = thread.comments.list()
@@ -31,28 +31,29 @@ for thread in hotThreads:
 			repliedComments = repliedComments.split()
 			repliedComments = list(filter(None, repliedComments))
 
-	botComments = reddit.redditor('RareDefinitions').comments.new()
-
 	# Iterate through the comments in the designated subreddit(s).
 	for comment in comments:
 		# If the comment has not yet been replied to, attempt to do so.
-		if comment.id not in repliedComments and comment.id not in botComments:
-			text = comment.body.lower()
-			message = ""
-		
+		if comment.id not in repliedComments and comment.author != "RareDefinitions":		
 			# Remove unnecessary symbols to grab only words or fragments.
-			re.sub('[^A-Za-z]+', ' ', text)
+			text = re.sub('[^A-Za-z]+', ' ', comment.body.lower())
+			message = ""
+			wordList = []
 			
 			# Iterate through each comment body checking for uncommon words.
 			for word in text.split():
 				frequency = zipf_frequency(word, "en", wordlist = "large")
-				if frequency != 0 and frequency < 2:
+				
+				# Upper bound of word appearance rate is once per ten million words.
+				if frequency != 0 and frequency < 2 and word not in wordList:
+					# Add each word to wordList to prevent duplicate definitions per reply.
+					wordList.append(word)
 					message += "> " + '[' + word + "](http://www.dictionary.com/browse/" + word + "?s=t)" + "\n\n"
 					
 					try:
 						synSet = nltk.corpus.wordnet.synsets(word)
 						definition = synSet[0].definition()
-						message += "> " + definition + '\n'
+						message += "> → " + definition + '\n'
 					except IndexError:
 						message = ""
 						break
@@ -60,11 +61,13 @@ for thread in hotThreads:
 					message += "\n***\n"
 			
 			if len(message) > 0:
-				message += "^^Beep! ^^I ^^define ^^rare ^^words. ^^| "
+				message += "^^Beep! ^^I ^^define ^^uncommon ^^words. ^^| "
 				message += "^^[Github](https://github.com/Silcore/RareDefinitionsBot) ^^| [^^Message ^^Creator](https://www.reddit.com/message/compose/?to=sillycore)"
 				comment.reply(message)
 				print("Bot replying to: " + comment.id + " ...")
 				repliedComments.append(comment.id)
+			else:
+				print("Comment " + comment.id + " does not contain rare words. Skipping.")
 		else:
 			print("Comment " + comment.id + " already processed. Skipping.")
 			
