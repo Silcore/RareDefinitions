@@ -14,8 +14,7 @@ The Rare Definitions Bot is intended to define words that have uncommon usage in
 - [ ] Allow the bot to detect rare words in self-post bodies.
 - [ ] Include word pronunciation with proper IPA phonetic symbols.
 - [ ] Include word parts-of-speech.
-- [ ] Respond to comments such as "good bot" or "bad bot" by checking account mail.
+- [X] Respond to comments such as "good bot" or "bad bot" by checking account mail.
 - [X] Break the code into methods.
-  - [X] Subreddit iterator to scan over top 25 of multiple subreddits.
   - [X] Good/Bad Replies
   - [X] Parsing/Defining
