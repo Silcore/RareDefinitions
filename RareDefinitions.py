@@ -116,22 +116,11 @@ def getResponse(sentiment):
 		return random.choice(positiveResponses) + random.choice(positiveEmojis) + "\n\n"
 	elif sentiment == "NEGATIVE":
 		return random.choice(negativeResponses) + random.choice(negativeEmojis) + "\n\n"
-	
-# Provides a list of top 25 hottest threads from designated subreddit list.
-def getThreads(reddit):
-	# User-defined list of subreddits for the bot to check.
-	subreddits = ["InforMe"]
-	threads = []
-	
-	for name in subreddits:
-		threads.extend(reddit.subreddit(name).hot(limit = 25))
-	
-	return threads
 
 def main():
 	# Initialize Reddit instance and other necessary variables.
 	reddit = botConfig.login()
-	defineWords(reddit, getThreads(reddit))
+	defineWords(reddit, botConfig.getThreads(reddit))
 	checkMessages(reddit)
 	
 	print("Δ The bot has closed successfully. Δ")
