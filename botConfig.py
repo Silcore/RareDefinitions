@@ -9,11 +9,11 @@ import praw
 
 def login():
 	reddit = praw.Reddit(
-		user_agent = "Rare-Definitions: v1.0 (by /u/Sillycore)",
-		client_id = "b4uHvPbegZuMbA",
-		client_secret = "JbJVwESjoqi3niQyrWN2-nYupec",
-		username = "ResourcefulRobot",
-		password = "ZgnG^Z&&edw(7^z&)((@*4&bJ"
+		user_agent = "HIDDEN_AGENT",
+		client_id = "HIDDEN_ID",
+		client_secret = "HIDDEN_SECRET",
+		username = "HIDDEN_USERNAME",
+		password = "HIDDEN_PASSWORD"
 	)
 	
 	return reddit
@@ -30,4 +30,4 @@ def getThreads(reddit):
 	return threads
 
 def getUsername():
-	return "ResourcefulRobot"
+	return "HIDDEN_USERNAME"
